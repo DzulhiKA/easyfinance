@@ -26,7 +26,6 @@ use App\Http\Controllers\Api\DashboardController;
 // =======================
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
-Route::get('/dashboard/summary', [DashboardController::class, 'summary']);
 
 // =======================
 // AUTHENTICATED ROUTES (JWT)
@@ -49,4 +48,10 @@ Route::middleware('auth:api')->group(function () {
     // =======================
     Route::apiResource('transactions', TransactionController::class)
         ->only(['index', 'store', 'destroy']);
+
+    // =======================
+    // DASHBOARD
+    // =======================
+    Route::get('/dashboard/summary', [DashboardController::class, 'summary']);
+    Route::get('/dashboard/chart', [DashboardController::class, 'chart']);
 });
