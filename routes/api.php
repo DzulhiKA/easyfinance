@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\TransactionController;
+use App\Http\Controllers\Api\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,6 +18,7 @@ use App\Http\Controllers\Api\TransactionController;
 | - GET    /api/me
 | - GET    /api/categories
 | - GET    /api/transactions
+/ - GET    /api/dashboard/summary
 */
 
 // =======================
@@ -24,6 +26,7 @@ use App\Http\Controllers\Api\TransactionController;
 // =======================
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
+Route::get('/dashboard/summary', [DashboardController::class, 'summary']);
 
 // =======================
 // AUTHENTICATED ROUTES (JWT)
