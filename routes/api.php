@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\TransactionController;
 use App\Http\Controllers\Api\DashboardController;
+use App\Http\Controllers\Api\ReportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -54,4 +55,13 @@ Route::middleware('auth:api')->group(function () {
     // =======================
     Route::get('/dashboard/summary', [DashboardController::class, 'summary']);
     Route::get('/dashboard/chart', [DashboardController::class, 'chart']);
+
+    // =======================
+    // REPORTS
+    // =======================
+    Route::prefix('reports')->group(function () {
+        Route::get('/monthly', [ReportController::class, 'monthly']);
+        Route::get('/yearly', [ReportController::class, 'yearly']);
+        Route::get('/category', [ReportController::class, 'category']);
+    });
 });
