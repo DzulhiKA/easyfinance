@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Barryvdh\DomPDF\Facade\Pdf;
+
 
 class ReportController extends Controller
 {
@@ -116,5 +118,39 @@ class ReportController extends Controller
             'year'  => (int) $request->year,
             'data'  => $rows,
         ]);
+    }
+    public function monthlyPdf(Request $request)
+    {
+        $request->validate([
+            'month' => 'required|integer|min:1|max:12',
+            'year'  => 'required|integer|min:2000',
+        ]);
+
+        $userId = auth('api')->id();
+
+        $transactions = DB::table('transactions')
+            ->join('categories', 'transactions.category_id', '=', 'categories.id')
+            ->where('transactions.user_id', $userId)
+            ->whereMonth('transactions.date', $request->month)
+            ->whereYear('transactions.date', $request->year)
+            ->orderBy('transactions.date')
+            ->select(
+                'transactions.date',
+                'transactions.type',
+                'transactions.amount',
+                'transactions.description',
+                'categories.name as category'
+            )
+            ->get();
+
+        $pdf = Pdf::loadView('reports.monthly', [
+            'transactions' => $transactions,
+            'month' => $request->month,
+            'year'  => $request->year,
+        ]);
+
+        return $pdf->download(
+            'laporan-bulanan-' . $request->month . '-' . $request->year . '.pdf'
+        );
     }
 }

@@ -63,5 +63,8 @@ Route::middleware('auth:api')->group(function () {
         Route::get('/monthly', [ReportController::class, 'monthly']);
         Route::get('/yearly', [ReportController::class, 'yearly']);
         Route::get('/category', [ReportController::class, 'category']);
+    // PDF Export
+        Route::get('/monthly/pdf', [ReportController::class, 'monthlyPdf']);
+
     });
 });
