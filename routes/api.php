@@ -66,6 +66,9 @@ Route::middleware('auth:api')->group(function () {
     // PDF Export
         Route::get('/monthly/pdf', [ReportController::class, 'monthlyPdf']);
         Route::get('/yearly/pdf', [ReportController::class, 'yearlyPdf']);
-
+        // Excel Export
+        Route::get('/monthly/excel', [ReportController::class, 'monthlyExcel']);
+        Route::get('/yearly/excel', [ReportController::class, 'yearlyExcel']);
+        Route::get('/category/excel', [ReportController::class, 'categoryExcel']);
     });
 });

@@ -6,6 +6,10 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\MonthlyReportExport;
+use App\Exports\YearlyReportExport;
+use App\Exports\CategoryReportExport;
 
 
 class ReportController extends Controller
@@ -194,6 +198,52 @@ class ReportController extends Controller
 
         return $pdf->download(
             'laporan-tahunan-' . $request->year . '.pdf'
+        );
+    }
+    public function monthlyExcel(Request $request)
+    {
+        $request->validate([
+            'month' => 'required|integer|min:1|max:12',
+            'year'  => 'required|integer|min:2000',
+        ]);
+
+        return Excel::download(
+            new MonthlyReportExport(
+                auth('api')->id(),
+                $request->month,
+                $request->year
+            ),
+            'laporan-bulanan-' . $request->month . '-' . $request->year . '.xlsx'
+        );
+    }
+    public function yearlyExcel(Request $request)
+    {
+        $request->validate([
+            'year' => 'required|integer|min:2000',
+        ]);
+
+        return Excel::download(
+            new YearlyReportExport(
+                auth('api')->id(),
+                $request->year
+            ),
+            'laporan-tahunan-' . $request->year . '.xlsx'
+        );
+    }
+    public function categoryExcel(Request $request)
+    {
+        $request->validate([
+            'month' => 'required|integer|min:1|max:12',
+            'year'  => 'required|integer|min:2000',
+        ]);
+
+        return Excel::download(
+            new CategoryReportExport(
+                auth('api')->id(),
+                $request->month,
+                $request->year
+            ),
+            'laporan-kategori-' . $request->month . '-' . $request->year . '.xlsx'
         );
     }
 }
