@@ -125,37 +125,43 @@ class ReportController extends Controller
     }
     public function monthlyPdf(Request $request)
     {
-        $request->validate([
-            'month' => 'required|integer|min:1|max:12',
-            'year'  => 'required|integer|min:2000',
-        ]);
+        try {
+            $request->validate([
+                'month' => 'required|integer|min:1|max:12',
+                'year'  => 'required|integer|min:2000',
+            ]);
 
-        $userId = auth('api')->id();
+            $userId = auth('api')->id();
 
-        $transactions = DB::table('transactions')
-            ->join('categories', 'transactions.category_id', '=', 'categories.id')
-            ->where('transactions.user_id', $userId)
-            ->whereMonth('transactions.date', $request->month)
-            ->whereYear('transactions.date', $request->year)
-            ->orderBy('transactions.date')
-            ->select(
-                'transactions.date',
-                'transactions.type',
-                'transactions.amount',
-                'transactions.description',
-                'categories.name as category'
-            )
-            ->get();
+            $transactions = DB::table('transactions')
+                ->join('categories', 'transactions.category_id', '=', 'categories.id')
+                ->where('transactions.user_id', $userId)
+                ->whereMonth('transactions.date', $request->month)
+                ->whereYear('transactions.date', $request->year)
+                ->orderBy('transactions.date')
+                ->select(
+                    'transactions.date',
+                    'transactions.type',
+                    'transactions.amount',
+                    'transactions.description',
+                    'categories.name as category'
+                )
+                ->get();
 
-        $pdf = Pdf::loadView('reports.monthly', [
-            'transactions' => $transactions,
-            'month' => $request->month,
-            'year'  => $request->year,
-        ]);
+            $pdf = PDF::loadView('reports.monthly', [
+                'transactions' => $transactions,
+                'month' => $request->month,
+                'year'  => $request->year,
+            ]);
 
-        return $pdf->download(
-            'laporan-bulanan-' . $request->month . '-' . $request->year . '.pdf'
-        );
+            return $pdf->download('laporan.pdf');
+        } catch (\Throwable $e) {
+            return response()->json([
+                'error' => $e->getMessage(),
+                'line'  => $e->getLine(),
+                'file'  => $e->getFile(),
+            ], 500);
+        }
     }
     public function yearlyPdf(Request $request)
     {

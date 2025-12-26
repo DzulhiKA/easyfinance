@@ -49,6 +49,9 @@ Route::prefix('v1')->group(function () {
         // =======================
         Route::apiResource('transactions', TransactionController::class)
             ->only(['index', 'store', 'destroy']);
+        Route::put('/transactions/{id}', [TransactionController::class, 'update']);
+        Route::delete('/transactions/{id}/image', [TransactionController::class, 'deleteImage']);
+        
 
         // =======================
         // DASHBOARD

@@ -2,94 +2,69 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Laporan Keuangan Bulanan</title>
+
     <style>
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: DejaVu Sans, sans-serif;
             font-size: 12px;
-            line-height: 1.4;
-            color: #333;
-            margin: 0;
-            padding: 20px;
-            background-color: #fff;
         }
+
         .header {
             text-align: center;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #007bff;
+            border-bottom: 1px solid #000;
+            margin-bottom: 10px;
+            padding-bottom: 5px;
         }
-        .header h2 {
-            margin: 0;
-            font-size: 24px;
-            font-weight: bold;
-            color: #007bff;
+
+        .info table {
+            width: 100%;
+            margin-top: 10px;
+            border-collapse: collapse;
         }
-        .info {
-            margin-bottom: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 0;
-            border-bottom: 1px solid #ddd;
+
+        .info td {
+            padding: 4px;
+            font-size: 12px;
         }
-        .info p {
-            margin: 0;
-            font-weight: normal;
-        }
-        table {
+
+        table.report {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 20px;
+            margin-top: 15px;
         }
-        th {
-            background-color: #f8f9fa;
-            color: #495057;
-            font-weight: bold;
-            padding: 10px;
-            text-align: left;
-            border: 1px solid #dee2e6;
+
+        table.report th, table.report td {
+            border: 1px solid #000;
+            padding: 6px;
         }
-        th.right {
-            text-align: right;
-        }
-        td {
-            padding: 8px 10px;
-            border: 1px solid #dee2e6;
-        }
-        td.right {
-            text-align: right;
+
+        table.report th {
+            background-color: #eee;
             font-weight: bold;
         }
-        tr:nth-child(even) {
-            background-color: #f8f9fa;
-        }
-        .footer {
-            margin-top: 30px;
-            text-align: center;
-            font-size: 10px;
-            color: #6c757d;
-            padding-top: 10px;
-            border-top: 1px solid #ddd;
-        }
-        .footer p {
-            margin: 5px 0;
+
+        .right {
+            text-align: right;
         }
     </style>
 </head>
 <body>
 
 <div class="header">
-    <h2>Laporan Keuangan Bulanan</h2>
+    <h3>Laporan Keuangan Bulanan</h3>
 </div>
 
 <div class="info">
-    <p><strong>Bulan:</strong> {{ $month }}</p>
-    <p><strong>Tahun:</strong> {{ $year }}</p>
+    <table>
+        <tr>
+            <td><strong>Bulan:</strong> {{ $month }}</td>
+            <td><strong>Tahun:</strong> {{ $year }}</td>
+        </tr>
+    </table>
 </div>
 
-<table>
+<table class="report">
     <thead>
         <tr>
             <th>Tanggal</th>
@@ -101,23 +76,16 @@
     </thead>
     <tbody>
         @foreach ($transactions as $trx)
-            <tr>
-                <td>{{ $trx->date }}</td>
-                <td>{{ $trx->category }}</td>
-                <td>{{ ucfirst($trx->type) }}</td>
-                <td>{{ $trx->description }}</td>
-                <td class="right">
-                    Rp {{ number_format($trx->amount, 0, ',', '.') }}
-                </td>
-            </tr>
+        <tr>
+            <td>{{ $trx->date }}</td>
+            <td>{{ $trx->category }}</td>
+            <td>{{ ucfirst($trx->type) }}</td>
+            <td>{{ $trx->description }}</td>
+            <td class="right">Rp {{ number_format($trx->amount, 0, ',', '.') }}</td>
+        </tr>
         @endforeach
     </tbody>
 </table>
-
-<div class="footer">
-    <p>Laporan ini dihasilkan secara otomatis pada {{ date('d-m-Y H:i:s') }}.</p>
-    <p>Untuk pertanyaan lebih lanjut, hubungi departemen keuangan.</p>
-</div>
 
 </body>
 </html>
